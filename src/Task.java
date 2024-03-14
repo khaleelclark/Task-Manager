@@ -2,9 +2,10 @@ public class Task {
     private String taskName;
     private boolean taskStatus;
 
-    public Task (String taskName, boolean taskStatus){
+    public Task (String taskName){
         this.taskName = taskName;
-        this.taskStatus = taskStatus;
+        // set task status to incomplete by default
+        this.taskStatus = false;
     }
 
     public String getTaskName() {
@@ -23,8 +24,13 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
+    //method to change the task status to complete
+    public void complete(){
+        this.taskStatus = true;
+    }
+
     @Override
     public String toString() {
-        return taskName + " (Status: " + (taskStatus ? "Task Completed" : "Task Incomplete") + ")";
+        return taskName + " (Status: " + (taskStatus ? "Complete" : "Incomplete") + ")";
     }
 }

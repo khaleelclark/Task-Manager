@@ -6,8 +6,6 @@ public class TaskManagerV2 {
     static List<Task> currentTaskList = new ArrayList<>();
     static List<Task> completedTaskList = new ArrayList<>();
 
-    //static ArrayList<String> currentTaskList = new ArrayList<>();
-    //static ArrayList<String> completedTaskList = new ArrayList<>();
     public static void main(String[] args) {
         startTaskManager();
     }
@@ -68,11 +66,8 @@ public class TaskManagerV2 {
         Scanner scanner = new Scanner(System.in);
         String taskName = scanner.nextLine();
 
-        // set task status to incomplete by default
-        boolean taskStatus = false;
-
         //create a new instance of the task object using the user input to set the name
-        Task newTask = new Task(taskName, taskStatus);
+        Task newTask = new Task(taskName);
 
         //add the new Task object to the list
         currentTaskList.add(newTask);
@@ -121,7 +116,7 @@ public class TaskManagerV2 {
     public static void completeTaskByIndex(int indexToComplete){
         if ( indexToComplete >= 0 &&  indexToComplete < currentTaskList.size()){
             Task taskToComplete = currentTaskList.get(indexToComplete);
-            taskToComplete.setTaskStatus(true);
+            taskToComplete.complete();
             completedTaskList.add(taskToComplete);
             System.out.println("Task: " + taskToComplete + "\n");
             currentTaskList.remove(indexToComplete);
