@@ -19,9 +19,4 @@ public class TaskList {
     public ArrayList<Task> getCompletedTaskList(){
         return completedTaskList;
     }
-
-
-
-
-
 }

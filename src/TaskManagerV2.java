@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 public class TaskManagerV2 {
     static List<TaskList> taskListList = new ArrayList<>();
     static TaskList selectedTaskList;
@@ -114,7 +113,6 @@ public class TaskManagerV2 {
         selectedTaskList.getCurrentTaskList().add(newTask);
         System.out.println("Task: " + newTask.getTaskName() + " Added successfully!\n");
     }
-
     public static void viewTasks(){
         if(selectedTaskList.getCurrentTaskList().isEmpty()){
             System.out.println("You're all caught up!");
@@ -126,7 +124,6 @@ public class TaskManagerV2 {
             System.out.println("\n");
         }
     }
-
     public static void completedTasks(){
         if(selectedTaskList.getCompletedTaskList().isEmpty()){
             System.out.println("You have no completed tasks. Complete a task and let's get things done!");
