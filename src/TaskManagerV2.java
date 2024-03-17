@@ -6,7 +6,7 @@ public class TaskManagerV2 {
     static List<TaskList> taskListList = new ArrayList<>();
     static TaskList selectedTaskList;
     static Scanner scanner = new Scanner(System.in);
-    static boolean temp = true;
+    static boolean start = true;
 
     public static void main(String[] args) {
         startTaskManager();
@@ -16,14 +16,13 @@ public class TaskManagerV2 {
         System.out.println("Welcome to Zindel's Task Manager!");
 
         //user options to access task list operations
-
-
-        while(temp) {
+        while(start) {
             System.out.println("Please select from the following options:\n");
             System.out.println("1. Add a new task list");
             System.out.println("2. View task lists");
             System.out.println("3. Select a task list");
             System.out.println("4. Remove a task list");
+            System.out.println("5. Exit the task manager");
 
             String initialUserInput = scanner.nextLine();
             switch (initialUserInput) {
@@ -34,14 +33,13 @@ public class TaskManagerV2 {
                     } else {
                         System.out.println("Your current task lists are: ");
                         displayTaskListIndex();
-                        System.out.println("");
                     }
                 }
                 case "3" ->  {
                     if(taskListList.isEmpty()){
                         System.out.println("You have no task lists to select. Add a new list now!\n");
                     } else {
-                        temp = selectTaskList();
+                        start = selectTaskList();
                     }
                 }
                 case "4" -> {
@@ -50,6 +48,10 @@ public class TaskManagerV2 {
                     } else {
                         removeTaskList();
                     }
+                }
+                case "5" -> {
+                    endTaskManager();
+                    return;
                 }
                 default -> System.out.println("Error: Invalid Entry. Please try again\n");
             }
@@ -62,8 +64,10 @@ public class TaskManagerV2 {
             System.out.println("3. Complete a task");
             System.out.println("4. View completed tasks");
             System.out.println("5. Remove a task");
-            System.out.println("6. Switch task list");
-            System.out.println("7. Exit the Task Manager");
+            System.out.println("6. Change a task name");
+            System.out.println("7. Switch task list");
+            System.out.println("9. Switch to previous menu");
+            System.out.println("8. Exit the Task Manager");
 
             String userInput = scanner.nextLine();
             switch (userInput) {
@@ -90,21 +94,16 @@ public class TaskManagerV2 {
                     scanner.nextLine();
                     removeTaskByIndex(indexToRemove);
                 }
-                case "6" -> {
-                    selectTaskListToSwitch();
-                }
-                case "7" -> {
+                case "6" -> changeTaskName();
+                case "7" -> selectTaskListToSwitch();
+                case "8" -> {
                     endTaskManager();
                     return;
                 }
                 default -> System.out.println("Error: Invalid Entry. Please try again\n");
             }
-
         }
     }
-    // This method prompts the user to enter their task, then stores it in the current task list array,
-    // and prints a confirmation with the task name
-
     public static void addTasks(){
         System.out.println("Please enter your task: ");
         String taskName = scanner.nextLine();
@@ -114,7 +113,7 @@ public class TaskManagerV2 {
 
         //add the new Task object to the list
         selectedTaskList.getCurrentTaskList().add(newTask);
-        System.out.println("Task: " + taskName + " Added successfully!\n");
+        System.out.println("Task: " + newTask.getTaskName() + " Added successfully!\n");
     }
 
     public static void viewTasks(){
@@ -138,6 +137,21 @@ public class TaskManagerV2 {
                 System.out.println(task);
             }
             System.out.println(" ");
+        }
+    }
+    public static void changeTaskName(){
+        System.out.println("Please enter the number of which task name you'd like to edit: ");
+        displayCurrentTaskIndex();
+        int taskIndexToEdit = Integer.parseInt(scanner.nextLine());
+        if (taskIndexToEdit >= 0 && taskIndexToEdit < selectedTaskList.getCurrentTaskList().size()){
+            Task taskToEdit = selectedTaskList.getCurrentTaskList().get(taskIndexToEdit);
+            System.out.println("Current task name: " + taskToEdit.getTaskName());
+            System.out.println("Please enter a new task name: ");
+            String newTaskName = scanner.nextLine();
+            taskToEdit.setTaskName(newTaskName);
+            System.out.println("Task " + taskToEdit.getTaskName() + " updated successfully!");
+        } else {
+            System.out.println("Invalid task number. Please try again.\n");
         }
     }
     public static void displayCurrentTaskIndex(){
@@ -171,9 +185,6 @@ public class TaskManagerV2 {
         System.out.println("Thank you for using Zindel's Task Manager");
         System.out.println("Goodbye!");
     }
-
-    //add task list method and remove task list method
-
     public static void addNewTaskList(){
         System.out.println("Please enter the name of your new Task List: ");
         String taskListName = scanner.nextLine();
@@ -193,23 +204,27 @@ public class TaskManagerV2 {
         if (indexToRemove > taskListList.size()){
             System.out.println("Invalid entry. Please try again.\n");
         } else taskListList.remove(indexToRemove);
+       System.out.println("The selected task list has been removed.");
     }
     public static boolean selectTaskList(){
         System.out.println("Please enter the index of the task list you'd like to Select");
         displayTaskListIndex();
         int indexToSelect = Integer.parseInt(scanner.nextLine());
-        if (indexToSelect > taskListList.size()){
-            System.out.println("Invalid entry. Please try again.\n");
-        } else selectedTaskList = taskListList.get(indexToSelect);
-        return false;
+        if (indexToSelect >= 0 && indexToSelect < taskListList.size()){
+            selectedTaskList = taskListList.get(indexToSelect);
+            System.out.println("You have selected the task list: " + selectedTaskList.getName());
+            return false;
+        } else System.out.println("Invalid entry. Please enter a valid number.\n");
+        return true;
     }
     public static void selectTaskListToSwitch(){
-        System.out.println("Please select which task list you'd like to switch to: ");
+        System.out.println("Please select the number of which task list you'd like to switch to: ");
         displayTaskListIndex();
         int indexToSwitchList = Integer.parseInt(scanner.nextLine());
-        if (indexToSwitchList > taskListList.size()){
-            System.out.println("Invalid entry. Please try again.\n");
-        } else selectedTaskList = taskListList.get(indexToSwitchList);
+        if (indexToSwitchList >= 0 && indexToSwitchList < taskListList.size()){
+            selectedTaskList = taskListList.get(indexToSwitchList);
+            System.out.println("Switched to task list: " + selectedTaskList.getName());
+        } else System.out.println("Invalid entry. Please try again.\n");
     }
 }
 

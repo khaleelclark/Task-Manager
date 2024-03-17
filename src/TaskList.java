@@ -1,13 +1,9 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-// once you enter the name show current task list, prompt do you want to see completed.
 public class TaskList {
-    static Scanner scanner = new Scanner(System.in);
-    private ArrayList<Task> currentTaskList;
-    private ArrayList<Task> completedTaskList;
-    private String name;
+    private final ArrayList<Task> currentTaskList;
+    private final ArrayList<Task> completedTaskList;
+    private final String name;
 
     public TaskList(String name){
         this.name = name;
