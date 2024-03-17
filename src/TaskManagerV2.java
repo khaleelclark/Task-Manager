@@ -66,7 +66,6 @@ public class TaskManagerV2 {
             System.out.println("5. Remove a task");
             System.out.println("6. Change a task name");
             System.out.println("7. Switch task list");
-            System.out.println("9. Switch to previous menu");
             System.out.println("8. Exit the Task Manager");
 
             String userInput = scanner.nextLine();

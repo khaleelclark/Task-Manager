@@ -16,14 +16,6 @@ public class Task {
         this.taskName = taskName;
     }
 
-    public boolean isTaskStatus() {
-        return taskStatus;
-    }
-
-    public void setTaskStatus(boolean taskStatus) {
-        this.taskStatus = taskStatus;
-    }
-
     //method to change the task status to complete
     public void complete(){
         this.taskStatus = true;

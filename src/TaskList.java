@@ -19,18 +19,7 @@ public class TaskList {
     public ArrayList<Task> getCompletedTaskList(){
         return completedTaskList;
     }
-    public void addCurrentTasks(Task task){
-        currentTaskList.add(task);
-    }
-    public void addCompleteTasks(Task task){
-        completedTaskList.add(task);
-    }
-    public void removeCurrentTask(int index){
-        currentTaskList.remove(index);
-    }
-    public void removeCompletedTask(int index){
-        completedTaskList.remove(index);
-    }
+
 
 
 
