@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-public class TaskManagerV2 {
+public class Main {
     static List<TaskList> taskListList = new ArrayList<>();
     static TaskList selectedTaskList;
     static Scanner scanner = new Scanner(System.in);
@@ -72,18 +72,20 @@ public class TaskManagerV2 {
                 case "1" -> addTasks();
                 case "2" -> viewTasks();
                 case "3" -> {
-                    if(selectedTaskList.getCurrentTaskList().isEmpty()){
+                    if(hasNoIncompleteTasks(selectedTaskList)){
                         System.out.println("You have no tasks to complete. Add some tasks!\n");
-                        break;
-                    } else displayCurrentTaskIndex();
-                    System.out.print("Enter the number of the task you'd like to complete: ");
-                    int indexToComplete = scanner.nextInt();
-                    scanner.nextLine();
-                    completeTaskByIndex(indexToComplete);
+                    }
+                    else {
+                        displayCurrentTaskIndex();
+                        System.out.print("Enter the number of the task you'd like to complete: ");
+                        int indexToComplete = scanner.nextInt();
+                        scanner.nextLine();
+                        completeTaskByIndex(indexToComplete);
+                    }
                 }
                 case "4" -> completedTasks();
                 case "5" -> {
-                    if(selectedTaskList.getCurrentTaskList().isEmpty()){
+                    if(selectedTaskList.getTaskList().isEmpty()){
                         System.out.println("You have no tasks to remove. Add some tasks!\n");
                         break;
                     } else displayCurrentTaskIndex();
@@ -103,34 +105,64 @@ public class TaskManagerV2 {
         }
     }
     public static void addTasks(){
-        System.out.println("Please enter your task: ");
-        String taskName = scanner.nextLine();
+        System.out.println("Please select what kind of task you would like to create: ");
+        System.out.println("1. Regular Task");
+        System.out.println("2. Recurring Task");
+        System.out.println("3. Grocery List Item");
+        String userInput = scanner.nextLine();
+        switch(userInput){
+            case "1" -> {
+                System.out.println("Please enter a task name: ");
+                String taskName = scanner.nextLine();
+                DefaultTask newTask = new DefaultTask(taskName);
+                selectedTaskList.getTaskList().add(newTask);
+                System.out.println("Task: " + newTask.getTaskName() + " Added successfully!\n");
+            }
+            case "2" -> {
+                System.out.println("Please enter a task name: ");
+                String taskName = scanner.nextLine();
+                System.out.println("Please enter how often you would like this task to repeat in minutes: ");
+                String recurringTime = scanner.nextLine();
+                RecurringTask newTask = new RecurringTask(taskName, Integer.parseInt(recurringTime));
+                selectedTaskList.getTaskList().add(newTask);
+                System.out.println("Task: " + newTask.getTaskName() + " Added successfully!\n");
+            }
+            case "3" -> {
+                System.out.println("Please enter a task name: ");
+                String taskName = scanner.nextLine();
+                System.out.println("Please enter item quantity: ");
+                String quantity = scanner.nextLine();
+                GroceryTask newTask = new GroceryTask(taskName, Integer.parseInt(quantity));
+                selectedTaskList.getTaskList().add(newTask);
+                System.out.println("Task: " + newTask.getTaskName() + " Added successfully!\n");
 
-        //create a new instance of the task object using the user input to set the name
-        Task newTask = new Task(taskName);
+            }
+            default -> System.out.println("Error: Invalid Entry. Please try again\n");
+        }
 
-        //add the new Task object to the list
-        selectedTaskList.getCurrentTaskList().add(newTask);
-        System.out.println("Task: " + newTask.getTaskName() + " Added successfully!\n");
     }
     public static void viewTasks(){
-        if(selectedTaskList.getCurrentTaskList().isEmpty()){
+        if(hasNoIncompleteTasks(selectedTaskList)){
             System.out.println("You're all caught up!");
         } else {
             System.out.println("Your current tasks are: ");
-            for (Task task : selectedTaskList.getCurrentTaskList()) {
-                System.out.println(task);
+            for (Task task : selectedTaskList.getTaskList()) {
+                if (!task.getTaskStatus()){
+                    task.printTaskInfo();
+                }
             }
             System.out.println("\n");
         }
     }
     public static void completedTasks(){
-        if(selectedTaskList.getCompletedTaskList().isEmpty()){
+        if(hasNoCompletedTasks(selectedTaskList)){
             System.out.println("You have no completed tasks. Complete a task and let's get things done!");
         } else {
             System.out.println("Your current completed tasks are: ");
-            for (Task task : selectedTaskList.getCompletedTaskList()) {
-                System.out.println(task);
+            for (Task task : selectedTaskList.getTaskList()) {
+                if (task.getTaskStatus()){
+                    System.out.println(task.getTaskName());
+                }
             }
             System.out.println(" ");
         }
@@ -139,8 +171,8 @@ public class TaskManagerV2 {
         System.out.println("Please enter the number of which task name you'd like to edit: ");
         displayCurrentTaskIndex();
         int taskIndexToEdit = Integer.parseInt(scanner.nextLine());
-        if (taskIndexToEdit >= 0 && taskIndexToEdit < selectedTaskList.getCurrentTaskList().size()){
-            Task taskToEdit = selectedTaskList.getCurrentTaskList().get(taskIndexToEdit);
+        if (taskIndexToEdit >= 0 && taskIndexToEdit < selectedTaskList.getTaskList().size()){
+            Task taskToEdit = selectedTaskList.getTaskList().get(taskIndexToEdit);
             System.out.println("Current task name: " + taskToEdit.getTaskName());
             System.out.println("Please enter a new task name: ");
             String newTaskName = scanner.nextLine();
@@ -152,27 +184,27 @@ public class TaskManagerV2 {
     }
     public static void displayCurrentTaskIndex(){
         int index = 0;
-        for (Task task : selectedTaskList.getCurrentTaskList()){
-            System.out.println(index + ". " + task);
+        for (Task task : selectedTaskList.getTaskList()){
+            if(!task.getTaskStatus()) {
+                System.out.println(index + ". " + task.getTaskName());
+            }
             index++;
         }
     }
     public static void removeTaskByIndex(int indexToRemove){
-        if (indexToRemove >= 0 && indexToRemove < selectedTaskList.getCurrentTaskList().size()){
-            System.out.println("Task: " + selectedTaskList.getCurrentTaskList().get(indexToRemove));
-            Task removeTask = selectedTaskList.getCurrentTaskList().remove(indexToRemove);
+        if (indexToRemove >= 0 && indexToRemove < selectedTaskList.getTaskList().size()){
+            System.out.println("Task: " + selectedTaskList.getTaskList().get(indexToRemove));
+            Task removeTask = selectedTaskList.getTaskList().remove(indexToRemove);
             System.out.println("Task: " + removeTask + " Has been removed.\n");
         } else {
             System.out.println("Invalid entry. Please try again.\n");
         }
     }
     public static void completeTaskByIndex(int indexToComplete){
-        if ( indexToComplete >= 0 &&  indexToComplete < selectedTaskList.getCurrentTaskList().size()){
-            Task taskToComplete = selectedTaskList.getCurrentTaskList().get(indexToComplete);
-            taskToComplete.complete();
-            selectedTaskList.getCompletedTaskList().add(taskToComplete);
+        if ( indexToComplete >= 0 &&  indexToComplete < selectedTaskList.getTaskList().size()){
+            Task taskToComplete = selectedTaskList.getTaskList().get(indexToComplete);
+            taskToComplete.setTaskComplete();
             System.out.println("Task: " + taskToComplete + "\n");
-            selectedTaskList.getCurrentTaskList().remove(indexToComplete);
         } else {
             System.out.println("Invalid entry. Please try again.\n");
         }
@@ -200,7 +232,7 @@ public class TaskManagerV2 {
         if (indexToRemove > taskListList.size()){
             System.out.println("Invalid entry. Please try again.\n");
         } else taskListList.remove(indexToRemove);
-       System.out.println("The selected task list has been removed.");
+        System.out.println("The selected task list has been removed.");
     }
     public static boolean selectTaskList(){
         System.out.println("Please enter the index of the task list you'd like to Select");
@@ -221,6 +253,25 @@ public class TaskManagerV2 {
             selectedTaskList = taskListList.get(indexToSwitchList);
             System.out.println("Switched to task list: " + selectedTaskList.getName());
         } else System.out.println("Invalid entry. Please try again.\n");
+    }
+    //this method returns true if any task in the task list is complete
+    public static boolean hasNoCompletedTasks(TaskList selectedTaskList){
+        for (Task task : selectedTaskList.getTaskList()){
+            if(task.getTaskStatus()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //this method returns true if any task in the task list is incomplete
+    public static boolean hasNoIncompleteTasks(TaskList selectedTaskList){
+        for (Task task : selectedTaskList.getTaskList()){
+            if(!task.getTaskStatus()){
+                return false;
+            }
+        }
+        return true;
     }
 }
 

@@ -1,4 +1,4 @@
-public class Task {
+public abstract class Task {
     private String taskName;
     private boolean taskStatus;
 
@@ -13,11 +13,17 @@ public class Task {
     public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
-    public void complete(){
+
+    public boolean getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskIncomplete() {
+        this.taskStatus = false;
+    }
+
+    public void setTaskComplete(){
         this.taskStatus = true;
     }
-    @Override
-    public String toString() {
-        return taskName + " (Status: " + (taskStatus ? "Complete" : "Incomplete") + ")";
-    }
+    public abstract void printTaskInfo();
 }
