@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-public class TaskManagerV2 {
+public class Main {
     static List<TaskList> taskListList = new ArrayList<>();
     static TaskList selectedTaskList;
     static Scanner scanner = new Scanner(System.in);
