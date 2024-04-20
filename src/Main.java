@@ -76,8 +76,8 @@ public class Main {
                         System.out.println("You have no tasks to complete. Add some tasks!\n");
                     }
                     else {
+                        System.out.print("Enter the number of the task you'd like to complete: \n");
                         displayCurrentTaskIndex();
-                        System.out.print("Enter the number of the task you'd like to complete: ");
                         int indexToComplete = scanner.nextInt();
                         scanner.nextLine();
                         completeTaskByIndex(indexToComplete);
@@ -87,12 +87,13 @@ public class Main {
                 case "5" -> {
                     if(selectedTaskList.getTaskList().isEmpty()){
                         System.out.println("You have no tasks to remove. Add some tasks!\n");
-                        break;
-                    } else displayCurrentTaskIndex();
-                    System.out.print("Enter the number of the task you'd like to remove: ");
-                    int indexToRemove = scanner.nextInt();
-                    scanner.nextLine();
-                    removeTaskByIndex(indexToRemove);
+                    } else {
+                        System.out.print("Enter the number of the task you'd like to remove: \n");
+                        displayCurrentTaskIndex();
+                        int indexToRemove = scanner.nextInt();
+                        scanner.nextLine();
+                        removeTaskByIndex(indexToRemove);
+                    }
                 }
                 case "6" -> changeTaskName();
                 case "7" -> selectTaskListToSwitch();
@@ -128,7 +129,7 @@ public class Main {
                 System.out.println("Task: " + newTask.getTaskName() + " Added successfully!\n");
             }
             case "3" -> {
-                System.out.println("Please enter a task name: ");
+                System.out.println("Please enter a grocery item: ");
                 String taskName = scanner.nextLine();
                 System.out.println("Please enter item quantity: ");
                 String quantity = scanner.nextLine();
@@ -193,9 +194,9 @@ public class Main {
     }
     public static void removeTaskByIndex(int indexToRemove){
         if (indexToRemove >= 0 && indexToRemove < selectedTaskList.getTaskList().size()){
-            System.out.println("Task: " + selectedTaskList.getTaskList().get(indexToRemove));
+           // System.out.println("Task: " + selectedTaskList.getTaskList().get(indexToRemove));
             Task removeTask = selectedTaskList.getTaskList().remove(indexToRemove);
-            System.out.println("Task: " + removeTask + " Has been removed.\n");
+            System.out.println("Task: " + removeTask.getTaskName() + " Has been removed.\n");
         } else {
             System.out.println("Invalid entry. Please try again.\n");
         }
@@ -204,7 +205,7 @@ public class Main {
         if ( indexToComplete >= 0 &&  indexToComplete < selectedTaskList.getTaskList().size()){
             Task taskToComplete = selectedTaskList.getTaskList().get(indexToComplete);
             taskToComplete.setTaskComplete();
-            System.out.println("Task: " + taskToComplete + "\n");
+            taskToComplete.printTaskInfo();
         } else {
             System.out.println("Invalid entry. Please try again.\n");
         }
@@ -231,8 +232,10 @@ public class Main {
         int indexToRemove = Integer.parseInt(scanner.nextLine());
         if (indexToRemove > taskListList.size()){
             System.out.println("Invalid entry. Please try again.\n");
-        } else taskListList.remove(indexToRemove);
-        System.out.println("The selected task list has been removed.");
+        } else {
+            taskListList.remove(indexToRemove);
+            System.out.println("The selected task list has been removed.");
+        }
     }
     public static boolean selectTaskList(){
         System.out.println("Please enter the index of the task list you'd like to Select");
@@ -242,8 +245,10 @@ public class Main {
             selectedTaskList = taskListList.get(indexToSelect);
             System.out.println("You have selected the task list: " + selectedTaskList.getName());
             return false;
-        } else System.out.println("Invalid entry. Please enter a valid number.\n");
-        return true;
+        } else {
+            System.out.println("Invalid entry. Please enter a valid number.\n");
+            return true;
+        }
     }
     public static void selectTaskListToSwitch(){
         System.out.println("Please select the number of which task list you'd like to switch to: ");
@@ -252,7 +257,9 @@ public class Main {
         if (indexToSwitchList >= 0 && indexToSwitchList < taskListList.size()){
             selectedTaskList = taskListList.get(indexToSwitchList);
             System.out.println("Switched to task list: " + selectedTaskList.getName());
-        } else System.out.println("Invalid entry. Please try again.\n");
+        } else {
+            System.out.println("Invalid entry. Please try again.\n");
+        }
     }
     //this method returns true if any task in the task list is complete
     public static boolean hasNoCompletedTasks(TaskList selectedTaskList){

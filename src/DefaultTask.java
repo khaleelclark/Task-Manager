@@ -5,6 +5,6 @@ public class DefaultTask extends Task {
     }
     @Override
     public void printTaskInfo() {
-        System.out.println(super.getTaskName() + " is " + getTaskStatus());
+        System.out.println(super.getTaskName() + " is " + (getTaskStatus() ? "Complete" : "Incomplete"));
     }
 }
