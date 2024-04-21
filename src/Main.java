@@ -6,7 +6,6 @@ public class Main {
     static TaskList selectedTaskList;
     static Scanner scanner = new Scanner(System.in);
     static boolean start = true;
-
     public static void main(String[] args) {
         startTaskManager();
     }
