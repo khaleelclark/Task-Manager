@@ -145,6 +145,7 @@ public class Main {
                 GroceryTask newTask = new GroceryTask(taskName, Integer.parseInt(quantity));
                 selectedTaskList.getTaskList().add(newTask);
                 System.out.println("Task: " + newTask.getTaskName() + " Added successfully!\n");
+                //fix output for complete, and view completed
 
             }
             case "exit" -> System.out.println("Selection canceled by user.");
@@ -174,6 +175,7 @@ public class Main {
             for (Task task : selectedTaskList.getTaskList()) {
                 if (task.getTaskStatus()){
                     System.out.println(task.getTaskName());
+                    task.printTaskInfo();
                 }
             }
             System.out.println(" ");
@@ -339,5 +341,3 @@ public class Main {
         return true;
     }
 }
-
-
