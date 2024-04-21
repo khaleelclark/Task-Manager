@@ -57,7 +57,7 @@ public class Main {
         }
         //user options for task operations
         while (true) {
-            System.out.println("Please select from the following options:\n");
+            System.out.println("Welcome to the main menu. Please select from the following options:\n");
             System.out.println("1. Add a new task");
             System.out.println("2. View current tasks");
             System.out.println("3. Complete a task");
@@ -78,9 +78,13 @@ public class Main {
                     else {
                         System.out.print("Enter the number of the task you'd like to complete: \n");
                         displayCurrentTaskIndex();
-                        int indexToComplete = scanner.nextInt();
-                        scanner.nextLine();
-                        completeTaskByIndex(indexToComplete);
+                        try {
+                            int indexToComplete = Integer.parseInt(scanner.nextLine());
+                            completeTaskByIndex(indexToComplete);
+                        }
+                        catch (NumberFormatException nfe) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
                     }
                 }
                 case "4" -> completedTasks();
@@ -90,9 +94,13 @@ public class Main {
                     } else {
                         System.out.print("Enter the number of the task you'd like to remove: \n");
                         displayCurrentTaskIndex();
-                        int indexToRemove = scanner.nextInt();
-                        scanner.nextLine();
-                        removeTaskByIndex(indexToRemove);
+                        try {
+                            int indexToRemove = Integer.parseInt(scanner.nextLine());
+                            removeTaskByIndex(indexToRemove);
+                        }
+                        catch (NumberFormatException nfe){
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
                     }
                 }
                 case "6" -> changeTaskName();
@@ -106,7 +114,8 @@ public class Main {
         }
     }
     public static void addTasks(){
-        System.out.println("Please select what kind of task you would like to create: ");
+        System.out.println("Please select what kind of task you would like to create, or type " +
+        "'exit' to return to the main menu.\")");
         System.out.println("1. Regular Task");
         System.out.println("2. Recurring Task");
         System.out.println("3. Grocery List Item");
@@ -138,6 +147,8 @@ public class Main {
                 System.out.println("Task: " + newTask.getTaskName() + " Added successfully!\n");
 
             }
+            case "exit" -> System.out.println("Selection canceled by user.");
+
             default -> System.out.println("Error: Invalid Entry. Please try again\n");
         }
 
@@ -168,19 +179,32 @@ public class Main {
             System.out.println(" ");
         }
     }
-    public static void changeTaskName(){
-        System.out.println("Please enter the number of which task name you'd like to edit: ");
-        displayCurrentTaskIndex();
-        int taskIndexToEdit = Integer.parseInt(scanner.nextLine());
-        if (taskIndexToEdit >= 0 && taskIndexToEdit < selectedTaskList.getTaskList().size()){
-            Task taskToEdit = selectedTaskList.getTaskList().get(taskIndexToEdit);
-            System.out.println("Current task name: " + taskToEdit.getTaskName());
-            System.out.println("Please enter a new task name: ");
-            String newTaskName = scanner.nextLine();
-            taskToEdit.setTaskName(newTaskName);
-            System.out.println("Task " + taskToEdit.getTaskName() + " updated successfully!");
-        } else {
-            System.out.println("Invalid task number. Please try again.\n");
+    public static void changeTaskName() {
+        while (true) {
+            System.out.println("Please enter the number of which task name you'd like to edit: ");
+            displayCurrentTaskIndex();
+            System.out.println("Or type 'exit' to return to the main menu.");
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("exit")) {
+                System.out.println("Exiting to the main menu.");
+                break;
+            }
+            try {
+                int taskIndexToEdit = Integer.parseInt(input);
+                if (taskIndexToEdit >= 0 && taskIndexToEdit < selectedTaskList.getTaskList().size()) {
+                    Task taskToEdit = selectedTaskList.getTaskList().get(taskIndexToEdit);
+                    System.out.println("Current task name: " + taskToEdit.getTaskName());
+                    System.out.println("Please enter a new task name: ");
+                    String newTaskName = scanner.nextLine();
+                    taskToEdit.setTaskName(newTaskName);
+                    System.out.println("Task " + taskToEdit.getTaskName() + " updated successfully!");
+                    break;
+                } else {
+                    System.out.println("Invalid task number. Please try again.\n");
+                }
+            } catch (NumberFormatException nfe) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
         }
     }
     public static void displayCurrentTaskIndex(){
@@ -194,7 +218,6 @@ public class Main {
     }
     public static void removeTaskByIndex(int indexToRemove){
         if (indexToRemove >= 0 && indexToRemove < selectedTaskList.getTaskList().size()){
-           // System.out.println("Task: " + selectedTaskList.getTaskList().get(indexToRemove));
             Task removeTask = selectedTaskList.getTaskList().remove(indexToRemove);
             System.out.println("Task: " + removeTask.getTaskName() + " Has been removed.\n");
         } else {
@@ -207,10 +230,11 @@ public class Main {
             taskToComplete.setTaskComplete();
             taskToComplete.printTaskInfo();
         } else {
-            System.out.println("Invalid entry. Please try again.\n");
+            System.out.println("Index out of range. Please enter a valid index and try again.\n");
         }
     }
     public static void endTaskManager(){
+        scanner.close();
         System.out.println("Thank you for using Zindel's Task Manager");
         System.out.println("Goodbye!");
     }
@@ -227,38 +251,72 @@ public class Main {
         }
     }
     public static void removeTaskList(){
-        System.out.println("Please enter the index of the task list you'd like to remove");
+        System.out.println("Please enter the index of the task list you'd like to remove, or type " +
+        "'exit' to return to the main menu.\")");
         displayTaskListIndex();
-        int indexToRemove = Integer.parseInt(scanner.nextLine());
-        if (indexToRemove > taskListList.size()){
-            System.out.println("Invalid entry. Please try again.\n");
-        } else {
-            taskListList.remove(indexToRemove);
-            System.out.println("The selected task list has been removed.");
+        String input = scanner.nextLine();
+        if (input.equalsIgnoreCase("exit")) {
+            System.out.println("Selection canceled by user.");
+            return;
+        }
+        try {
+            int indexToRemove = Integer.parseInt(input);
+            if (indexToRemove > taskListList.size()) {
+                System.out.println("Task index is out of range. Please try again. \n");
+            } else {
+                taskListList.remove(indexToRemove);
+                System.out.println("The selected task list has been removed.");
+            }
+        }
+        catch (NumberFormatException nfe){
+            System.out.println("Invalid entry. Please enter a valid number.");
         }
     }
     public static boolean selectTaskList(){
-        System.out.println("Please enter the index of the task list you'd like to Select");
+        System.out.println("Please enter the index of the task list you'd like to select, or type " +
+        "'exit' to return to the main menu.");
         displayTaskListIndex();
-        int indexToSelect = Integer.parseInt(scanner.nextLine());
-        if (indexToSelect >= 0 && indexToSelect < taskListList.size()){
-            selectedTaskList = taskListList.get(indexToSelect);
-            System.out.println("You have selected the task list: " + selectedTaskList.getName());
+        String input = scanner.nextLine();
+        if (input.equalsIgnoreCase("exit")) {
+            System.out.println("Selection canceled by user.");
             return false;
-        } else {
-            System.out.println("Invalid entry. Please enter a valid number.\n");
-            return true;
         }
+        try {
+            int indexToSelect = Integer.parseInt(input);
+            if (indexToSelect >= 0 && indexToSelect < taskListList.size()) {
+                selectedTaskList = taskListList.get(indexToSelect);
+                System.out.println("You have selected the task list: " + selectedTaskList.getName());
+                return false;
+            } else {
+                System.out.println("Task index is out of range. Please try again. \n");
+                return true;
+            }
+        }
+        catch (NumberFormatException nfe){
+            System.out.println("Invalid entry. Please enter a valid number.");
+        }
+        return true;
     }
     public static void selectTaskListToSwitch(){
-        System.out.println("Please select the number of which task list you'd like to switch to: ");
+        System.out.println("Please select the number of which task list you'd like to switch to, or type " +
+        "'exit' to return to the main menu.\") ");
         displayTaskListIndex();
-        int indexToSwitchList = Integer.parseInt(scanner.nextLine());
-        if (indexToSwitchList >= 0 && indexToSwitchList < taskListList.size()){
-            selectedTaskList = taskListList.get(indexToSwitchList);
-            System.out.println("Switched to task list: " + selectedTaskList.getName());
-        } else {
-            System.out.println("Invalid entry. Please try again.\n");
+        String input = scanner.nextLine();
+        if (input.equalsIgnoreCase("exit")) {
+            System.out.println("Selection canceled by user.");
+            return;
+        }
+        try {
+            int indexToSwitchList = Integer.parseInt(input);
+            if (indexToSwitchList >= 0 && indexToSwitchList < taskListList.size()) {
+                selectedTaskList = taskListList.get(indexToSwitchList);
+                System.out.println("Switched to task list: " + selectedTaskList.getName());
+            } else {
+                System.out.println("Task index is out of range. Please try again.");
+            }
+        }
+        catch (NumberFormatException nfe){
+            System.out.println("Invalid entry. Please enter a valid number.");
         }
     }
     //this method returns true if any task in the task list is complete
