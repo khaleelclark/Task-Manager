@@ -10,11 +10,9 @@ public class Main {
     public static void main(String[] args) {
         startTaskManager();
     }
-    //user defined methods below
     public static void startTaskManager(){
         System.out.println("Welcome to Zindel's Task Manager!");
 
-        //user options to access task list operations
         while(start) {
             System.out.println("Please select from the following options:\n");
             System.out.println("1. Add a new task list");
@@ -55,7 +53,6 @@ public class Main {
                 default -> System.out.println("Error: Invalid Entry. Please try again\n");
             }
         }
-        //user options for task operations
         while (true) {
             System.out.println("Welcome to the main menu. Please select from the following options:\n");
             System.out.println("1. Add a new task");
@@ -145,14 +142,11 @@ public class Main {
                 GroceryTask newTask = new GroceryTask(taskName, Integer.parseInt(quantity));
                 selectedTaskList.getTaskList().add(newTask);
                 System.out.println("Task: " + newTask.getTaskName() + " Added successfully!\n");
-                //fix output for complete, and view completed
-
             }
             case "exit" -> System.out.println("Selection canceled by user.");
 
             default -> System.out.println("Error: Invalid Entry. Please try again\n");
         }
-
     }
     public static void viewTasks(){
         if(hasNoIncompleteTasks(selectedTaskList)){
@@ -161,6 +155,7 @@ public class Main {
             System.out.println("Your current tasks are: ");
             for (Task task : selectedTaskList.getTaskList()) {
                 if (!task.getTaskStatus()){
+                    System.out.println(task.getTaskName());
                     task.printTaskInfo();
                 }
             }
@@ -330,7 +325,6 @@ public class Main {
         }
         return true;
     }
-
     //this method returns true if any task in the task list is incomplete
     public static boolean hasNoIncompleteTasks(TaskList selectedTaskList){
         for (Task task : selectedTaskList.getTaskList()){
