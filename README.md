@@ -13,3 +13,7 @@ The primary goal of this project was to demonstrate key programming concepts lea
 * **Inheritance:** Using inheritance to create different types of tasks with shared functionalities.
 * **Robust Error Handling:** Implementing try-catch blocks to ensure the application gracefully handles invalid user input.
 * **Abstraction:** Using abstraction to have seperation between the user interface and the task management logic.
+
+# Expected inputs and Outputs
+This program uses numbered options and switch statements. 
+It expects you to input the number corresponding to your desired selection. The output will be the result of that selection, typically a task list or task.
