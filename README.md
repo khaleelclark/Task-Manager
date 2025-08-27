@@ -1,5 +1,4 @@
 # Khaleel Clark
-## Software Development I (CRN: 31774)
 This is a CLI task manager that I created for my Java Programming course for my final project.
 
 Upon running the program, you are presented with a series of options to manage your task lists. 
